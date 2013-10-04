@@ -14,7 +14,7 @@ author :
   name : Laker Huang
   email : younglaker8@gmail.com
   github : younglaker
-  google+ : Laker Huang
+  # google+ : Laker Huang
   feedburner : feedname
 
 # The production_url is only used when full-domain names are needed
@@ -25,7 +25,7 @@ author :
 # Else if you are pushing to username.github.io, replace with your username.
 # Finally if you are pushing to a GitHub project page, include the project name at the end.
 #
-production_url : http://younglaker.github.io/CometLab/
+production_url : http://younglaker.github.io/CometLab
 
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
 #
@@ -54,7 +54,7 @@ JB :
   #   - Only the following values are falsy: ["", null, false]
   #   - When setting BASE_PATH it must be a valid url.
   #     This means always setting the protocol (http|https) or prefixing with "/"
-  BASE_PATH : false
+  BASE_PATH : http://younglaker.github.io/CometLab
 
   # By default, the asset_path is automatically defined relative to BASE_PATH plus the enabled theme.
   # ex: [BASE_PATH]/assets/themes/[THEME-NAME]
@@ -63,7 +63,6 @@ JB :
   # ex: 
   #   http://s3.amazonaws.com/yoursite/themes/watermelon
   #   /assets
-  #
   ASSET_PATH : false
 
   # These paths are to the main pages Jekyll-Bootstrap ships with.
@@ -92,7 +91,7 @@ JB :
       num_posts: 5
       width: 580
       colorscheme: light
-   
+
   # Settings for analytics helper
   # Set 'provider' to the analytics provider you want to use.
   # Set 'provider' to false to turn analytics off globally.
@@ -116,7 +115,7 @@ JB :
   #
   sharing :
     provider : false
-    
+
   # Settings for all other include helpers can be defined by creating 
   # a hash with key named for the given helper. ex:
   #
@@ -127,4 +126,4 @@ JB :
   # and include your custom code. Your custom file must be defined at:
   #   ./_includes/custom/[HELPER]
   # where [HELPER] is the name of the helper you are overriding.
-  
+
