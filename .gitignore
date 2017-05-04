@@ -1,10 +1,6 @@
-_site/*
-_theme_packages/*
-
-Thumbs.db
 .DS_Store
-
-!.gitkeep
-
-.rbenv-version
-.rvmrc
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
