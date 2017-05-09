@@ -1,7 +1,7 @@
 {
-  "name": "sell",
+  "name": "vue-eleme",
   "version": "1.0.0",
-  "description": "sell ",
+  "description": "A Eleme-like website written by vue.js 2",
   "author": "younglaker <younglaker8@gmail.com>",
   "private": true,
   "scripts": {

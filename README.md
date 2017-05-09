@@ -1,6 +1,6 @@
-# sell
+# vue-eleme
 
-> sell 
+> A eleme written by vue.js
 
 ## Build Setup
 
