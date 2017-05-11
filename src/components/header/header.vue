@@ -1,12 +1,12 @@
 <template>
-  <div class="header">iiiiiiiiiaaa222
+  <div class="header">9999000
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 </script>
 
-<style lang="stylus" rel="stylesheet/stylus">
+<style lang="stylus">
   // @import "../../common/stylus/mixin";
 
 </style>
