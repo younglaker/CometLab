@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import Resource from 'vue-resource'
 // import Hello from '@/components/Hello'
 
 // 在 build/webpack.base.conf.js 定义了 components 的地址
@@ -10,6 +11,9 @@ import seller from 'components/seller/seller'
 
 // 引入并注册 vue-router
 Vue.use(Router)
+
+// 引入并注册 vue-resource
+Vue.use(Resource)
 
 export default new Router({
   // 全局配置 <router-link> 的默认『激活 class 类名』

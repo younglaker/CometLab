@@ -1,3 +1,4 @@
+// 1像素border,再在base.styl里缩放
 border-1px($color)
   position: relative
   &:after
@@ -12,3 +13,9 @@ border-1px($color)
 border-none()
   &:after
     display: none
+
+// 根据设备 dpi， 使用不同像素的图片作为背景
+bg-image($url)
+  background-image: url($url + "@2x.png")
+  @media (-webkit-min-device-pixel-ratio: 3),(min-device-pixel-ratio: 3)
+    background-image: url($url + "@3x.png")

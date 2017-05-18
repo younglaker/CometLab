@@ -22,7 +22,7 @@ var proxyTable = config.dev.proxyTable
 
 var app = express()
 
-
+// 定义模拟数据的接口
 var appData = require('../data.json')
 var seller = appData.seller
 var goods = appData.goods
@@ -32,21 +32,21 @@ var apiRoutes = express.Router()
 
 apiRoutes.get('/seller', function (req, res) {
   res.json({
-    errno: 0,
+    status: 1, // 定义状态码
     data: seller
   });
 })
 
 apiRoutes.get('/goods', function (req, res) {
   res.json({
-    errno: 0,
+    status: 1,
     data: goods
   })
 })
 
 apiRoutes.get('/ratings', function (req, res) {
   res.json({
-    errno: 0,
+    status: 1,
     data: ratings
   });
 })
