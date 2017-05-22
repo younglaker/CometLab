@@ -1,8 +1,7 @@
-<<<<<<< HEAD
 # Project List
 
 Checkout the branches to see the projects.
-=======
+
 # vue-eleme
 
 > A eleme written by vue.js
