@@ -25,5 +25,3 @@ Checkout the branches to see the projects.
 
 **Branch:** ng-ionc
 
-
-
