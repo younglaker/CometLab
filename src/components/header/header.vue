@@ -26,6 +26,8 @@
       <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
       <i class="icon-keyboard_arrow_right"></i>
     </div>
+
+    <!-- 头部背景 -->
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%">
     </div>
@@ -58,6 +60,7 @@
             </div>
           </div>
         </div>
+        <!-- 采用 sticky footer 布局 -->
         <div class="detail-close" @click="hideDetail">
           <i class="icon-close"></i>
         </div>
@@ -71,6 +74,20 @@
     props: {
       seller: {
         type: Object
+      }
+    },
+    data () {
+      return {
+        detailShow: false // 初始化 detailShow
+      }
+    },
+    methods: {
+      // 显示、隐藏的方法
+      showDetail () {
+        this.detailShow = true
+      },
+      hideDetail () {
+        this.detailShow = false
       }
     },
     created () {
