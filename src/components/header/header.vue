@@ -31,35 +31,53 @@
     <div class="background">
       <img :src="seller.avatar" width="100%" height="100%">
     </div>
+
+    <!-- 详情信息弹框 -->
     <transition name="fade">
       <div v-show="detailShow" class="detail">
         <div class="detail-wrapper clearfix">
           <div class="detail-main">
+
             <h1 class="name">{{seller.name}}</h1>
+
+            <!-- 评分星级 -->
             <div class="star-wrapper">
+              <!-- 使用 star 组件时，需传入 size、score -->
+              <!-- :size 星星大小，组件定义了48、36、24 -->
+              <!-- :score 评分，从data.json里来 -->
               <star :size="48" :score="seller.score"></star>
             </div>
+
+            <!-- 优惠信息标题 -->
             <div class="title">
+              <!-- 采用 flex 布局，文字定宽，两边线条自适应 -->
               <div class="line"></div>
               <div class="text">优惠信息</div>
               <div class="line"></div>
             </div>
+
+            <!-- 优惠信息详情 -->
             <ul v-if="seller.supports" class="supports">
               <li class="support-item" v-for="(item,index) in seller.supports">
                 <span class="icon" :class="classMap[seller.supports[index].type]"></span>
                 <span class="text">{{seller.supports[index].description}}</span>
               </li>
             </ul>
+
+            <!-- 优惠信息标题 -->
             <div class="title">
               <div class="line"></div>
               <div class="text">商家公告</div>
               <div class="line"></div>
             </div>
+
+            <!-- 优惠信息详情 -->
             <div class="bulletin">
               <p class="content">{{seller.bulletin}}</p>
             </div>
           </div>
         </div>
+
         <!-- 采用 sticky footer 布局 -->
         <div class="detail-close" @click="hideDetail">
           <i class="icon-close"></i>
@@ -70,6 +88,8 @@
 </template>
 
 <script>
+  import Star from 'components/star/star'
+
   export default {
     props: {
       seller: {
@@ -92,6 +112,9 @@
     },
     created () {
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+    },
+    components: {
+      Star   // 注册评分组件
     }
   }
 </script>
@@ -244,12 +267,14 @@
             margin-top: 18px
             padding: 2px 0
             text-align: center
+          // flex 布局 http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html
+          // 父级使用 display: flex
           .title
             display: flex
             width: 80%
             margin: 28px auto 24px auto
             .line
-              flex: 1
+              flex: 1 // 属性都为1，则它们将等分剩余空间（如果有的话）
               position: relative
               top: -6px
               border-bottom: 1px solid rgba(255, 255, 255, 0.2)
