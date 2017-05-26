@@ -33,6 +33,8 @@
     </div>
 
     <!-- 详情信息弹框 -->
+    <!-- 过渡效果 https://cn.vuejs.org/v2/guide/transitions.html -->
+    <!-- transition 是vue自带的组件，定义name（CSS里要用到），然后再css里写渐变动画 -->
     <transition name="fade">
       <div v-show="detailShow" class="detail">
         <div class="detail-wrapper clearfix">
@@ -58,6 +60,12 @@
 
             <!-- 优惠信息详情 -->
             <ul v-if="seller.supports" class="supports">
+              <!-- supports 结构
+              "supports": [
+              {
+                "type": 0,
+                "description": "在线支付满28减5"
+              } -->
               <li class="support-item" v-for="(item,index) in seller.supports">
                 <span class="icon" :class="classMap[seller.supports[index].type]"></span>
                 <span class="text">{{seller.supports[index].description}}</span>
@@ -244,12 +252,18 @@
       width: 100%
       height: 100%
       overflow: auto
-      backdrop-filter: blur(10px)
+      backdrop-filter: blur(10px) // 背景模糊
       opacity: 1
       background: rgba(7, 17, 27, 0.8)
+      // name="xx",这里就是 xxe-enter-active，xxe-leave-active
+      // xx-enter: 进入过渡的开始状态。在元素被插入时生效，在下一个帧移除。
+      // xx-enter-active: 进入过渡的结束状态。在元素被插入时生效，在 transition/animation 完成之后移除。
+      // xx-leave: 离开过渡的开始状态。在离开过渡被触发时生效，在下一个帧移除。
+      // xx-leave-active: 离开过渡的结束状态。在离开过渡被触发时生效，在 transition/animation 完成之后移除。
       &.fade-enter-active, &.fade-leave-active
         transition: all 0.5s
       &.fade-enter, &.fade-leave-active
+        // 针对上面普通状态的 opacity: 1 和 background: rgba(7, 17, 27, 0.8)
         opacity: 0
         background: rgba(7, 17, 27, 0)
       .detail-wrapper
@@ -268,6 +282,7 @@
             padding: 2px 0
             text-align: center
           // flex 布局 http://www.ruanyifeng.com/blog/2015/07/flex-grammar.html
+          // vue.js 使用postcss来保证兼容性
           // 父级使用 display: flex
           .title
             display: flex
@@ -300,6 +315,7 @@
                 margin-right: 6px
                 background-size: 16px 16px
                 background-repeat: no-repeat
+                // 不同优惠详情使用相应的bg
                 &.decrease
                   bg-image('decrease_2')
                 &.discount
