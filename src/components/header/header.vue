@@ -100,7 +100,7 @@
 
   export default {
     props: {
-      seller: {
+      seller: { // App.vue传入的
         type: Object
       }
     },
@@ -119,6 +119,7 @@
       }
     },
     created () {
+      // 存放“优惠分类”的数组
       this.classMap = ['decrease', 'discount', 'special', 'invoice', 'guarantee']
     },
     components: {
@@ -289,6 +290,8 @@
             width: 80%
             margin: 28px auto 24px auto
             .line
+              // flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+              // 默认值为 0 1 auto。后两个属性可选
               flex: 1 // 属性都为1，则它们将等分剩余空间（如果有的话）
               position: relative
               top: -6px
