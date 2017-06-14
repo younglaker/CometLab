@@ -3,9 +3,14 @@
     <div class="goods">
       <!-- .menu-wrapper 和 .foods-wrapper 两栏布局，menu定宽，foods自适应。采用flex布局 -->
       <!-- 左边分类栏 -->
+      <!-- ref 被用来给元素或子组件注册引用信息。如果在普通的 DOM 元素上使用，引用指向的就是 DOM 元素; 如果用在子组件上，引用就指向组件实例。 -->
       <div class="menu-wrapper" ref="menuWrapper">
         <ul>
-          <li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex===index}">
+          <!-- :class="{'current':currentIndex===index}" 表示，若currentIndex（右边食品块的index）等于index（本导航菜单index），则添加.current，使其有高亮效果 -->
+
+          <!-- selectMenu(index,$event) 传递点击事件，为了解决PC浏览器事件重复问题 -->
+          <li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex===index}"
+              @click="selectMenu(index,$event)">
           <span class="text border-1px">
             <!-- data.json里，goods/优惠分类/type
                 "goods": [
@@ -29,11 +34,15 @@
 
       <!-- 右边食品列表 -->
       <div class="foods-wrapper" ref="foodsWrapper">
+        <!-- 一个优惠分类下所有食品，一个li对应一个优惠分类 -->
         <ul>
           <li v-for="item in goods" class="food-list" ref="foodList">
+            <!-- 优惠分类的标题 -->
             <h1 class="title">{{item.name}}</h1>
+
+            <!-- 具体的食品列表，一个li对应一个食品 -->
             <ul>
-              <li v-for="food in item.foods" class="food-item border-1px">
+              <li v-for="food in item.foods" @click="selectFood(food,$event)" class="food-item border-1px">
                 <div class="icon">
                   <img width="57" height="57" :src="food.icon">
                 </div>
@@ -44,8 +53,10 @@
                     <span class="count">月售{{food.sellCount}}份</span><span>好评率{{food.rating}}%</span>
                   </div>
                   <div class="price">
-                    <span class="now">￥{{food.price}}</span><span class="old"
-                                                                  v-show="food.oldPrice">￥{{food.oldPrice}}</span>
+                    <span class="now">￥{{food.price}}</span><span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
+                  </div>
+                  <div class="cartcontrol-wrapper">
+                    <cartcontrol @add="addFood" :food="food"></cartcontrol>
                   </div>
                 </div>
               </li>
@@ -53,23 +64,38 @@
           </li>
         </ul>
       </div>
-      <!-- <shopcart ref="shopcart" ></shopcart> -->
+      <!-- 给组件传值selectFoods（选择的食物）、deliveryPrice（配送费）、minPrice（起送价） -->
+      <shopcart ref="shopcart" :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
     </div>
-    <!-- <food  ref="food"></food> -->
+    <food @add="addFood" :food="selectedFood" ref="food"></food>
   </div>
 </template>
 
 
 <script>
+// https://github.com/ustbhuangyi/better-scroll
 import BScroll from 'better-scroll'
+// 购物车组件
+import shopcart from 'components/shopcart/shopcart'
+import cartcontrol from 'components/cartcontrol/cartcontrol'
+
 
 // 定义一个常量，表示请求返回正常
 const RESP_OK = 1
 
 export default {
+  // 接收App.vue <router-view> 进来的seller
   props: {
     seller: {
       type: Object
+    }
+  },
+  data () {
+    return {
+      goods: [], // 定义goods变量，在created () 里获得api数据
+      listHeight: [], // 右侧食品列表，每个分类下食品列表块的高度
+      scrollY: 0, // 当前滑动的高度
+      selectedFood: {}
     }
   },
   computed: {
@@ -84,15 +110,20 @@ export default {
           return i
         }
       }
+
+      // 否则返回0
       return 0
-    }
-  },
-  data () {
-    return {
-      goods: [], // 定义goods变量，在created () 里获得api数据
-      listHeight: [],
-      scrollY: 0,
-      selectedFood: {}
+    },
+    selectFoods () {
+      let foods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
     }
   },
   created () {
@@ -103,6 +134,10 @@ export default {
       response = response.body
       if (response.status === RESP_OK) {
         this.goods = response.data
+
+        // 在获取数据后执行滑动插件
+        // vue 会在更新数据后更新DOM，但是是异步的。导致获取数据后插入 DOM 里，执行 this._initScroll() 时 DOM 还没建好，better-scroll 插件无法获取高度，就不能生效
+        // $nextTick() 表示 DOM 更新后的回调，所以在这里面执行 _initScroll() 才有用
         this.$nextTick(() => {
           this._initScroll()
           this._calculateHeight()
@@ -111,32 +146,76 @@ export default {
     })
   },
   methods: {
+    /* 点击左边菜单，右边的食品列表自动滑到相应分类 */
+    selectMenu (index, event) {
+      // 点击左边菜单是，在移动端，执行的是BScroll 插件的点击事件，在PC端浏览器会多执行一次浏览器自带的点击事件，就会执行两次selectMenu()
+      // 自己创建的事件会有_constructed属性（!event._constructed为false），而浏览器自带的事件没有（!event._constructed为true，就退出函数），以此来阻止浏自带事件的执行
+      if (!event._constructed) {
+        return
+      }
+
+      let foodList = this.$refs.foodList
+      let el = foodList[index]
+
+      // BScroll 插件的方法：scrollToElement(el, time, offsetX, offsetY, easing)滚动到某个元素，el（必填）表示 dom 元素，time 表示动画时间，offsetX 和 offsetY 表示坐标偏移量，easing 表示缓动函数
+      this.foodsScroll.scrollToElement(el, 300)
+    },
+    selectFood (food, event) {
+      if (!event._constructed) {
+        return
+      }
+      this.selectedFood = food
+      this.$refs.food.show()
+    },
+    addFood (target) {
+      this._drop(target)
+    },
+    _drop (target) {
+      // 体验优化,异步执行下落动画
+      this.$nextTick(() => {
+        this.$refs.shopcart.drop(target)
+      })
+    },
+    /* 初始化滑动插件 */
     _initScroll () {
       this.meunScroll = new BScroll(this.$refs.menuWrapper, {
-        click: true
+        click: true // 可以点击（BScroll 插件默认阻止点击事件，就不能点击面板进行操作）
       })
 
       this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
-        click: true,
-        probeType: 3
+        click: true, // 可以点击
+        probeType: 3 // 实时获取滑动的位置
       })
 
+      // BScroll 插件的事件，返回当前位置纵坐标pos
       this.foodsScroll.on('scroll', (pos) => {
+        // round 取四舍五入取整，abs 取正数
         this.scrollY = Math.abs(Math.round(pos.y))
       })
     },
+    /* 计算每个分类下食品列表总长度，放入数组 */
     _calculateHeight () {
+      // foodList表示优惠分类下的块的合集
       let foodList = this.$refs.foodList
       let height = 0
+
+      // 把初始高度0放入第一个，因为currentIndex()计算当前块的index时，要拿第i和i+1块的高度比，当高度为0-第1块高度时，表示在第一块
       this.listHeight.push(height)
-      console.log(foodList)
+
+      // foodList.length等于优惠分类的个数
       for (let i = 0; i < foodList.length; i++) {
         let item = foodList[i]
-        console.log(item)
+
+        // 累加来获取每个区间的高度
+        // 因为下一个区间的高度基于上一个区间，所以要累加
         height += item.clientHeight
         this.listHeight.push(height)
       }
     }
+  },
+  components: {
+    shopcart,
+    cartcontrol
   }
 }
 </script>

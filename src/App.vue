@@ -17,7 +17,8 @@
 
     <!-- <router-view> 组件是一个 functional 组件，渲染路径匹配到的视图组件。<router-view> 渲染的组件还可以内嵌自己的 <router-view>，根据嵌套路径，渲染嵌套组件。 -->
     <!-- http://router.vuejs.org/zh-cn/api/router-view.html -->
-    <router-view></router-view>
+    <!-- :seller="seller" 把seller传给下面的组件 -->
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
