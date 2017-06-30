@@ -67,7 +67,7 @@
       <!-- 给组件传值selectFoods（选择的食物）、deliveryPrice（配送费）、minPrice（起送价） -->
       <shopcart ref="shopcart" :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
     </div>
-    <food @add="addFood" :food="selectedFood" ref="food"></food>
+    <!-- <food @add="addFood" :food="selectedFood" ref="food"></food> -->
   </div>
 </template>
 
@@ -156,7 +156,6 @@ export default {
 
       let foodList = this.$refs.foodList
       let el = foodList[index]
-
       // BScroll 插件的方法：scrollToElement(el, time, offsetX, offsetY, easing)滚动到某个元素，el（必填）表示 dom 元素，time 表示动画时间，offsetX 和 offsetY 表示坐标偏移量，easing 表示缓动函数
       this.foodsScroll.scrollToElement(el, 300)
     },

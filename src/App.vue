@@ -43,8 +43,7 @@ export default {
       // 判断请求是否正常
       if (response.status === RESP_OK) {
         this.seller = response.data
-        console.log(this.seller)
-        // this.seller = Object.assign({}, this.seller, response.data);
+        // this.seller = Object.assign({}, this.seller, response.data)
       }
     })
   },
