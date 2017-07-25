@@ -1,28 +1,10 @@
-# Project List
+# Todolist(Simple version)
 
-Checkout the branches to see the projects.
+## Environment
 
-# vue-eleme
+vue.js 2
+bootstrap 3
 
-**Introduction:**  A eleme written by vue.js
+## Run
 
-**Branch:** vue-eleme
-
-## Vue To-do List
-
-**Introduction:** A To-do List written by Vue.js 2.
-
-**Branch:** vue-todo
-
-## Vue Eleme
-
-**Introduction:** A Eleme-like website written by Vue.js 2.
-
-**Branch:**  vue-eleme
-
-## Angular Ionic App
-
-**Introduction:** Using Angular and Ionic to build Android App.
-
-**Branch:** ng-ionc
-
+Just open index.html
