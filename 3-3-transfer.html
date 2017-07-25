@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>转账</title>
+
+<link type="text/css" rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="lib/font-awesome-4.5.0/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="lib/framework7/css/framework7.ios.css" />
+<!-- <link type="text/css" rel="stylesheet" href="css/icon.css" /> -->
+<link type="text/css" rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<div class="views">
+    <div class="view view-main" data-page="home">
+		<!-- Main -->
+	    <div class="pages navbar-through toolbar-through">
+	        <div data-page="home" class="page">
+	            <div class="page-content no_padd_bott">
+	            	<p class="pargh_block_white fw_bold">邻萌互动</p>
+
+					<!-- trnas_info -->
+	            	<div class="trnas_info">
+	            		<div class="row no-gutter">
+	            			<div class="col-33 scan_qr_code">
+	            				<img src="img/scan_qr_code.png">
+	            				<span>扫描二维码</span>
+	            			</div>
+	            			<div class="col-66 input_phone">
+								<p>或</p>
+								<input type="text" placeholder="输入对方手机号">
+	            			</div>
+	            		</div>
+	            	</div>
+					<!-- /trnas_info -->
+
+					<!-- trans_to -->
+					<div class="trans_to pargh_block_transp">
+						<img src="img/avatar2.png" alt="avatar">
+						<span class="user_name">大鱼铁板烧的老板娘</span>
+						<span class="user_id">邻萌ID：102421</span>
+						<span class="affirm_msg">请确认收款人信息是否正确？</span>
+					</div>
+
+					<!-- trans_form -->
+					<form class="trans_form">
+						<div class="trans_box">
+							<div class="label">转账数额：</div>
+							<div class="row">
+								<div class="col-100 input-box">
+									<input type="number" class="money" placeholder="请输入转账金额">
+								</div>
+							</div>
+						</div>
+
+						<div class="trans_box">
+							<div class="label">附言：</div>
+							<div class="row">
+								<div class="col-100 input-box">
+									<input type="text" placeholder="">
+								</div>
+							</div>
+						</div>
+						
+						<div class="row control_btn">
+							<div class="col-60 btn_block">
+								<a href="#" class="button button-big">转账 </a>
+							</div>
+						</div>
+					</form>
+					<!-- /trans_form -->
+	            </div>
+	        </div>
+	    </div>
+		<!-- /Main -->
+
+    </div>
+</div>
+
+
+</body>
+<script type="text/javascript" src="lib/zepto/zepto.min.js"></script>
+<script type="text/javascript" src="js/mainjs.js"></script>
+
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>坐标转换</title>
+    <style type="text/css">
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+        body,
+        button,
+        input,
+        select,
+        textarea {
+            font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
+        }
+    </style>
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&libraries=convertor"></script>
+    <script>
+        function init() {
+
+            var map = new qq.maps.Map(document.getElementById("container"), {
+                center: new qq.maps.LatLng(39.916527, 116.397128),
+                zoom: 13
+            });
+            //转换百度坐标为腾讯坐标
+            qq.maps.convertor.translate(new qq.maps.LatLng(39.911082, 116.396135), 3, function(res) {
+                latlng = res[0];
+                var marker = new qq.maps.Marker({
+                    map: map,
+                    position: latlng
+                });
+            });
+        }
+    </script>
+</head>
+
+<body onload="init()">
+    <div style="width:603px;height:300px" id="container"></div>
+    <p>
+        由百度坐标转为腾讯坐标后，仍准确打点到国家大剧院
+        <br>
+        <br>库引用方法：
+        <br>&lt;script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&<span style="color:red">libraries=convertor</span>"&lt;/script&gt;
+    </p>
+</body>
+
+</html>

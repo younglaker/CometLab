@@ -1,0 +1,372 @@
+<!DOCTYPE>
+<html>
+<head>
+    <title>MarkerCluster</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+    <style type="text/css">
+        ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        #map_canvas {
+            position: absolute;
+            left: 320px;
+            min-width: 800px;
+            min-height: 767px;
+            border: 1px solid #ff0000;
+        }
+
+        #panel {
+            position: relative;
+            width: 300px;
+            height: 500px;
+            overflow: auto;
+            border: 1px solid #000000;
+        }
+
+        #attributeList li {
+            border-bottom: 1px dashed #999999;
+            padding: 5px 5px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+<body onload="window.init()">
+<div id="map_canvas"></div>
+<div id="panel">
+    
+    <div>
+        设置属性：
+        <ul id="attributeList">
+            <li>
+                <span>gridSize:</span>
+                <select id="gridSize">
+                    <option value="60" selected="selected">Default</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="70">70</option>
+                    <option value="80">80</option>
+                    <option value="500">500</option>
+                </select>
+            </li>
+            <li>
+                <span>maxZoom</span>
+                <select id="maxZoom">
+                    <option value="" selected="selected">Default</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                </select>
+
+                <div>
+                    <span>当前地图级别：<span id="mapZoomLevel"></span></span>
+                </div>
+            </li>
+            <li>
+                <span>averageCenter:</span>
+                <label>
+                    <input id="averageCenter_true" type="radio" value="true" name="averageCenter"/>
+                    <span>true</span>
+                </label>
+                <label>
+                    <input id="averageCenter_false" type="radio" value="false" name="averageCenter" checked="checked"/>
+                    <span>false</span>
+                </label>
+            </li>
+            <li>
+                <span>minimumClusterSize:</span>
+                <select id="minimumClusterSize">
+                    <option value="1">1</option>
+                    <option value="2" selected="selected">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </li>
+            <li>
+                <span>styles</span>
+                <select id="styles">
+                    <option value="" selected="">Default</option>
+                    <option value="People">People</option>
+                    <option value="Conversation">Conversation</option>
+                </select>
+            </li>
+            <li>
+                <span>zoomOnClick:</span>
+                <label>
+                    <input id="zoomOnClick_true" type="radio" value="true" name="zoomOnClick" checked="checked"/>
+                    <span>true</span>
+                </label>
+                <label>
+                    <input id="zoomOnClick_false" type="radio" value="false" name="zoomOnClick"/>
+                    <span>false</span>
+                </label>
+            </li>
+            <li>
+                <input id="addMarkerBt" type="button"  name="addMarkerBt" value='添加marker'/>
+                <input id="addMarkersBt" type="button"  name="addMarkersBt" value='添加多个marker'/>
+                <input id="removeMarkerBt" type="button"  name="removeMarkerBt" value='移除marker'/>
+                <input id="removeMarkersBt" type="button"  name="removeMarkersBt" value='移除多个marker'/>
+                <input id="clearMarkersBt" type="button"  name="clearMarkersBt" value='清除marker'/>
+            </li>
+        </ul>
+    </div>
+    <hr/>
+</div>
+<script type="text/javascript">
+
+var map;
+
+function $(a) {
+    return document.getElementById(a);
+}
+ var data = [
+            [39.959228, 116.367874],
+            [39.984486, 116.427612],
+            [39.988169, 116.279984],
+            [39.847558, 116.402893],
+            [39.941857, 116.383667],
+            [40.022882, 116.551208],
+            [39.819085, 116.581421],
+            [39.924482, 116.205826],
+            [39.757880, 116.162567],
+            [39.631606, 116.325989],
+            [39.797986, 116.415253],
+            [40.117990, 116.416626],
+            [40.271668, 116.638412],
+            [40.143190, 116.236038],
+            [39.928168, 116.515503],
+            [39.902362, 116.389160],
+            [39.935539, 116.377487]
+        ];
+window.init = function() {
+
+    var Map = qq.maps.Map;
+    var Marker = qq.maps.Marker;
+    var LatLng = qq.maps.LatLng;
+    var Event = qq.maps.event;
+
+    var MarkerImage = qq.maps.MarkerImage;
+    var MarkerShape = qq.maps.MarkerShape;
+    var MarkerAnimation = qq.maps.MarkerAnimation;
+    var Point = qq.maps.Point;
+    var Size = qq.maps.Size;
+    var ALIGN = qq.maps.ALIGN;
+
+    var MVCArray = qq.maps.MVCArray;
+    var MarkerCluster = qq.maps.MarkerCluster;
+    var Cluster = qq.maps.Cluster;
+    var MarkerDecoration = qq.maps.MarkerDecoration;
+
+    var forEach = function (array, fun) {
+        for (var i = 0, l = array.length; i < l; ++i) {
+            if (fun(array[i], i) === false) {
+                return false;
+            }
+        }
+    };
+
+    var latlng = new LatLng(39.91, 116.38);
+    var options = {
+        'zoom':11,
+        'center':latlng,
+        'mapTypeId':"roadmap"
+    };
+
+    var map = new Map($('map_canvas'), options);
+
+    var markers = new MVCArray();
+    var markerCluster;
+
+    function createCluster() {
+        for (var i = 0; i < data.length; i++) {
+            var latLng = new LatLng(data[i][0], data[i][1]);
+            var decoration = new MarkerDecoration(i, new Point(0, -5));
+            var marker = new Marker({
+                'position':latLng,
+                map:map
+            });
+            markers.push(marker);
+        }
+
+        markerClusterer = new MarkerCluster({
+            map:map,
+            minimumClusterSize:2, //默认2
+            markers:markers,
+            zoomOnClick:true, //默认为true
+            gridSize:30, //默认60
+            averageCenter:true, //默认false
+            maxZoom:18, //默认18
+        });
+
+        Event.addListener(markerClusterer, 'clusterclick', function (evt) {
+            // writeLog("mouse event", eventType);
+            var ss =  evt;
+            // alert('点击了聚合点');
+        });
+    };
+
+    createCluster();
+
+
+    var imgPath = "./images/";
+    var Styles = {
+        "People":[
+            {
+                icon:new MarkerImage(imgPath + "people35.png", new Size(35, 35), new Point(0, 0), new Point(16, 0)),
+                text:new MarkerDecoration('<font style="color:#ff00ff;font-size:10px;font-weight:bold;">{num}</font>', new Point(0, 5))
+            }
+        ],
+        "Conversation":[
+            {
+                icon:new MarkerImage(imgPath + "conv30.png", new Size(30, 27), new Point(0, 0), new Point(3, 0)),
+                text:new MarkerDecoration('<font style="color:#ff00ff;font-size:10px;font-weight:bold;">{num}</font>', new Point(0, -2))
+            }
+        ]
+    };
+
+
+
+    var maker_add;
+
+    function addMarker() {
+        var latLng = new LatLng(39.849558,116.406893);
+        var decoration = new MarkerDecoration(i, new Point(0, -5));
+        maker_add = new Marker({
+            'position':latLng,
+            decoration:decoration,
+            map:map
+        });
+        markers.push(maker_add);
+
+        markerClusterer.addMarker(maker_add);
+    }
+
+    var markers_add = [];
+
+    function addMarkers() {
+        var bounds = map.getBounds();
+        var sw = bounds.getSouthWest();
+        var ne = bounds.getNorthEast();
+        var lngSpan = Math.abs(sw.getLng() - ne.getLng());
+        var latSpan = Math.abs(ne.getLat() - sw.getLat());
+        for (var i=0; i < 100; i++) {
+            var position = new qq.maps.LatLng(ne.getLat() - latSpan*(Math.random()*0.95), sw.getLng() + lngSpan*(Math.random()*0.95));
+            
+            var decoration = new MarkerDecoration(i, new Point(0, -5));
+            var makeradd = new Marker({
+                'position':position,
+                decoration:decoration,
+                map:map
+            });
+            markers_add.push(makeradd);
+        }
+        
+        markerClusterer.addMarkers(markers_add);
+    }
+
+    function removeMarker() {
+        markerClusterer.removeMarker(maker_add);
+    }
+
+    function removeMarkers() {
+        markerClusterer.removeMarkers(markers_add);
+    }
+
+    function clearMarkers() {
+        markerClusterer.clearMarkers();
+    }
+
+    function setMarkerClusterOption(key, value) {
+        markerClusterer.set(key, value);
+    }
+
+    var setKeyHandle = {
+        'gridSize': 'setGridSize',
+        'maxZoom': 'setMaxZoom',
+        'averageCenter' : 'setAverageCenter'
+    }; 
+
+    var getKeyHandle = {
+        'gridSize': 'getGridSize',
+        'maxZoom': 'getMaxZoom',
+        'averageCenter' : 'getAverageCenter'
+    };
+
+    var gridSize = $("gridSize");
+    Event.addDomListener(gridSize, "change", function () {
+        setMarkerClusterOption("gridSize", parseInt(this.value));
+    });
+
+    var maxZoom = $("maxZoom");
+    Event.addDomListener(maxZoom, "change", function () {
+        setMarkerClusterOption("maxZoom", this.value ? parseInt(this.value) : null);
+    });
+
+    var addmarker = $("addMarkerBt");
+    Event.addDomListener(addmarker, "click", function () {
+        addMarker();
+    });
+
+    var removeMarkerb = $("removeMarkerBt");
+    Event.addDomListener(removeMarkerb, "click", function () {
+        removeMarker();
+    });
+
+    var addmarker = $("addMarkersBt");
+    Event.addDomListener(addmarker, "click", function () {
+        addMarkers();
+    });
+
+    var removeMarkerb = $("removeMarkersBt");
+    Event.addDomListener(removeMarkerb, "click", function () {
+        removeMarkers();
+    });
+
+
+    var clearMarkerb = $("clearMarkersBt");
+    Event.addDomListener(clearMarkerb, "click", function () {
+        clearMarkers();
+    });
+
+    var minimumClusterSize = $("minimumClusterSize");
+    Event.addDomListener(minimumClusterSize, "change", function () {
+        setMarkerClusterOption("minimumClusterSize", parseInt(this.value));
+    });
+
+    var averageCenter_true = $("averageCenter_true");
+    Event.addDomListener(averageCenter_true, "click", function () {
+        setMarkerClusterOption("averageCenter", true);
+    });
+
+    var averageCenter_false = $("averageCenter_false");
+    Event.addDomListener(averageCenter_false, "click", function () {
+        setMarkerClusterOption("averageCenter", false);
+    });
+
+    var zoomOnClick_true = $("zoomOnClick_true");
+    Event.addDomListener(zoomOnClick_true, "click", function () {
+        setMarkerClusterOption("zoomOnClick", true);
+    });
+
+    var zoomOnClick_false = $("zoomOnClick_false");
+    Event.addDomListener(zoomOnClick_false, "click", function () {
+        setMarkerClusterOption("zoomOnClick", false);
+    });
+
+    var stylesSelect = $("styles");
+    Event.addDomListener(stylesSelect, "change", function () {
+        setMarkerClusterOption("styles", Styles[this.value] ? Styles[this.value] : null);
+    });
+};
+
+</script>
+</body>
+</html>

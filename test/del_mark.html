@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>移除标记</title>
+<style type="text/css">
+*{
+    margin:0px;
+    padding:0px;
+}
+body, button, input, select, textarea {
+    font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
+}
+#container {
+   min-width:603px;
+   min-height:767px;
+}
+</style>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+<script>
+//定义地图，标记数组
+var map,markersArray = [];
+    var init = function() {
+    //设置地图中心点
+    var center = new qq.maps.LatLng(39.916527,116.397128);
+    map = new qq.maps.Map(document.getElementById('container'),{
+        center: center,
+        zoom: 13
+    });
+    //添加dom监听事件
+    qq.maps.event.addDomListener(map, 'click', function(event) {
+        addMarker(event.latLng);
+    }); 
+}
+
+//添加标记
+function addMarker(location) {
+    var marker = new qq.maps.Marker({
+        position: location,
+        map: map
+    });
+    markersArray.push(marker);
+
+            console.log(markersArray);
+}
+
+//清除覆盖层
+function clearOverlays() {
+    if (markersArray) {
+        for (i in markersArray) {
+            markersArray[i].setMap(null);
+        }
+    }
+}
+
+//显示覆盖层
+function showOverlays() {
+    if (markersArray) {
+        for (i in markersArray) {
+            markersArray[i].setMap(map);
+        }
+    }
+} 
+
+
+//删除覆盖物
+function deleteOverlays() {
+    if (markersArray) {
+        for (i in markersArray) {
+            markersArray[i].setMap(null);
+        }
+        markersArray.length = 0;
+    }
+}
+</script>
+</head>
+<body onload="init()">
+<div>
+<span>单击地图添加标记</span> 
+<input onclick="clearOverlays();" type=button value="清除标记"/>
+<input onclick="showOverlays();" type=button value="显示标记"/>
+<input onclick="deleteOverlays();" type=button value="删除标记"/>
+</div>
+<div id="container"></div>
+</body>
+</html>

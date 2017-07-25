@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>创建新团队</title>
+
+<link type="text/css" rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="lib/font-awesome-4.5.0/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="lib/framework7/css/framework7.ios.css" />
+<!-- <link type="text/css" rel="stylesheet" href="css/icon.css" /> -->
+<link type="text/css" rel="stylesheet" href="lib/laker-popup/laker-popup.css" />
+<link type="text/css" rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<div class="views">
+    <div class="view view-main" data-page="home">
+		<!-- Main -->
+	    <div class="pages navbar-through toolbar-through">
+	        <div data-page="home" class="page">
+	            <div class="page-content no_padd_bott">
+					<!-- Form -->
+					<form id="form_new_team" class="form_new_team list-block store-data lomo_form">
+						<ul>
+							<li>
+								<div class="item-content">
+									<div class="item-inner">
+										<div class="item-title label">队名:</div>
+										<div class="item-input">
+											<!-- Make sure that input have "name attrobute" -->
+											<input type="text" name="title" id="form_title" placeholder="填写标题" required >
+										</div>
+									</div>
+								</div>
+							</li>
+							<li class="">
+								<div class="item-content">
+									<div class="item-inner">
+										<div class="item-input textarea_full">
+											<textarea  id="form_desc" placeholder="简单描述您的队伍..."></textarea>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+
+						<div class="row control_btn">
+							<!-- <div class="col-25 btn_block">
+								<a href="#" class="button button-big">预览</a>
+							</div> -->
+							<div class="col-50 btn_block">
+								<a href="#" class="button button-big btn_release">发布</a>
+								<!-- <input type="submit" class="button button-big btn_release" value="发布"> -->
+							</div>
+						</div>
+					</form>
+					<!-- /Form -->
+
+	            </div>
+	        </div>
+	    </div>
+		<!-- /Main -->
+
+    </div>
+</div>
+
+
+</body>
+<!-- <script type="text/javascript" src="lib/zepto/zepto.min.js"></script> -->
+<script type="text/javascript" src="lib/jQuery/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="lib/url/url.js"></script>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=YRBBZ-6MUK4-U4MUZ-XEGLO-FGSTV-COBDO&libraries=drawing,geometry,convertor"></script>
+<script type="text/javascript" src="lib/coord/coord.js"></script>
+<script type="text/javascript" src="lib/laker-popup/laker-popup.js"></script>
+<script type="text/javascript" src="js/mainjs.js"></script>
+<script type="text/javascript" src="js/new-team.js"></script>
+
+</html>

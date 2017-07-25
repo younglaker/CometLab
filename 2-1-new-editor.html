@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>发布新萌袋</title>
+
+<link type="text/css" rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="lib/font-awesome-4.5.0/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="lib/framework7/css/framework7.ios.css" />
+<link type="text/css" rel="stylesheet" href="lib/font-icon-self/icon.css" />
+<link type="text/css" rel="stylesheet" href="lib/laker-popup/laker-popup.css" />
+<link type="text/css" rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<div class="views">
+    <div class="view view-main" data-page="home">
+		<!-- Main -->
+	    <div class="pages navbar-through toolbar-through">
+	        <div data-page="home" class="page">
+	            <div class="page-content no_padd_bott">
+	            	<div class="pargh_block_white txt_center">免费发布创意萌袋，获赠10%邻萌宝！</div>
+					<!-- Form -->
+					<form id="form_new_lomo" class="form_new_lomo list-block store-data lomo_form">
+						<ul>
+							<li>
+								<div class="item-content">
+									<div class="item-inner">
+										<div class="item-title label">标题:</div>
+										<div class="item-input">
+											<!-- Make sure that input have "name attrobute" -->
+											<input type="text" name="title" id="form_title" placeholder="填写标题" required >
+										</div>
+										<span>的萌袋</span>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-inner">
+										<div class="item-title label">邻萌宝数量:</div>
+										<div class="item-input">
+											<input type="number" min="0" name="" id="form_coins" placeholder="填写数量" required pattern="\d+">
+										</div>
+										<span>个</span>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-inner">
+										<div class="item-title label">限领人数:</div>
+										<div class="item-input">
+											<input type="number" min="0" name=""  id="form_limit" placeholder="填写人数" required >
+										</div>
+										<span>人</span>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-inner">
+										<div class="item-title label">有效期:</div>
+										<div class="item-input">
+											<input type="date" name=""  id="form_end" placeholder="" required >
+										</div>
+										<span></span>
+									</div>
+								</div>
+							</li>
+							<li>
+								<div class="item-content">
+									<div class="item-inner">
+										<div class="item-title label">地点:</div>
+										<div class="item-input">
+											<input type="text" name=""  id="form_pos" placeholder="" style="display:none;" value="" required >
+											方圆百米内任意位置
+										</div>
+										<span class="map_show"><i class="fa fa-map-marker" style="color: #f00;"></i></span>
+									</div>
+								</div>
+							</li>
+							<!-- Additional "align-top" class for correct textarea alignment -->
+							<li class="">
+								<div class="item-content">
+									<div class="item-inner">
+										<div class="item-input textarea_full">
+											<textarea  id="form_subtitle" placeholder="简单描述您的萌袋，祝福、嬉笑、吐槽、怒赞。。。"></textarea>
+										</div>
+									</div>
+								</div>
+							</li>
+						</ul>
+
+						<div class="img_upload_des">添加图片让萌袋更加生动有趣，最多可添加3张</div>
+						<div class="row img_upload">
+							<input id="img_input1" class="img_input" type="file" accept="image/*"/>
+							<input id="img_input2" class="img_input" type="file" accept="image/*"/>
+							<input id="img_input3" class="img_input" type="file" accept="image/*"/>
+
+							<label for="img_input1" class="img_label1 col-33 img_box no_img"></label>
+							<label for="img_input2" class="img_label2 col-33 img_box no_img"></label>
+							<label for="img_input3" class="img_label3 col-33 img_box no_img"></label>
+						</div>
+
+						<div class="rules_block pargh_block_white">
+							<p>规则说明：</p>
+							<p>1. 您可在当前位置方圆100米内免费发布创意萌袋，您最多可获系统奖励萌袋金额10%的邻萌宝！</p>
+							<p>2. 萌袋玩法类似微信的拼手气红包。暂时不能自由设定袋内邻萌宝数量和人数。系统限定每个萌袋内置100个邻萌宝，可供20人领取，有效期不限。</p>
+							<p>3. 萌袋发出后，系统将冻结您账户中的100 LMC。前10名用户，每一名领到萌袋后，系统自动解冻10 LMC，您即回本。从第11名开始，系统自动奖励您个1 LMC，直至20人领完，您累计获赠10LMC。</p>
+							<p>4. 每天每人限发一次，您不能自己领取其中邻萌宝。</p>
+							<p>5. 萌袋发布后，通过微信转发给好友，邀请好友加入邻萌宝，新用户注册即成为您的跟班！可在3个月内持续获得跟班的10%收益奖励。如果您的一级跟班邀请新人加入，您将获得二级跟班5%的收益奖励！</p>
+							<p>现在立即邀请好友加入，您将立即获赠50LMC的内测期推荐奖。好友新人将立即获赠50LMC新人礼包！</p>
+						</div>
+
+						<div class="row control_btn">
+							<div class="col-25 btn_block">
+								<a href="#" class="button button-big btn_preview">预览</a>
+							</div>
+							<div class="col-25 btn_block">
+								<!-- <a href="#" class="button button-big btn_release">发布</a> -->
+								<input type="submit" class="button button-big btn_release" value="发布">
+							</div>
+						</div>
+					</form>
+					<!-- /Form -->
+
+	            </div>
+	        </div>
+	    </div>
+		<!-- /Main -->
+
+		<!-- Map -->
+		<div class="editor_map_block">
+			<div id="editor_map" class="editor_map"></div>
+			<p class="map_prompt">请点击地图选择方圆百里内的地点</p>
+			<div class="row control_btn">
+				<div class="col-25 btn_block">
+					<a href="#" class="button button-big btn_map_cancel">取消</a>
+				</div>
+				<div class="col-25 btn_block">
+					<a href="#" class="button button-big btn_map_ok">确定</a>
+				</div>
+			</div>
+		</div>
+		<!-- /Map -->
+    </div>
+</div>
+
+
+</body>
+<!-- <script type="text/javascript" src="lib/zepto/zepto.min.js"></script> -->
+<script type="text/javascript" src="lib/jQuery/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="lib/url/url.js"></script>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=YRBBZ-6MUK4-U4MUZ-XEGLO-FGSTV-COBDO&libraries=drawing,geometry,convertor"></script>
+<script type="text/javascript" src="lib/coord/coord.js"></script>
+<script type="text/javascript" src="lib/laker-popup/laker-popup.js"></script>
+<script type="text/javascript" src="js/mainjs.js"></script>
+<script type="text/javascript" src="js/editor.js"></script>
+
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>腾讯地图-效用函数示例</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&libraries=drawing,geometry,autocomplete,convertor"></script>
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+        #container {
+            width: 100%;
+            height: 100%
+        }
+        body div {
+            text-indent: 20px;
+            line-height: 22px;
+        }
+    </style>
+</head>
+
+<body onload="init()">
+    <div id="container" style="width:660px;height:400px;"></div>
+    <div id="area" style="width:660px;"></div>
+    <div id="res" style="width:660px;"></div>
+    <div id="course" style="width:660px;"></div>
+    <div id="length" style="width:660px;"></div>
+    <div id="eLatLng" style="width:660px;"></div>
+    <div id="aLatLng" style="width:660px;"></div>
+    <div id="dba" style="width:660px;"></div>
+    <div id="fLatLng" style="width:660px;"></div>
+
+
+    <script type="text/javascript">
+        function init() {
+            var a, b, c, d, e, f = [];
+
+            a = new qq.maps.LatLng(39.93, 116.44004334);
+            b = new qq.maps.LatLng(39.93, 116.35421264);
+            c = new qq.maps.LatLng(39.896775, 116.35421264);
+            d = new qq.maps.LatLng(39.89, 116.44004334);
+
+
+            //初始化地图
+            var map = new qq.maps.Map(container, {
+                // 地图的中心地理坐标。
+                center: new qq.maps.LatLng(39.91, 116.397128),
+                zoom: 12
+            });
+
+            //给A,B,C,D四点加文字标注
+            var label1 = new qq.maps.Label({
+                offset: new qq.maps.Size(5, -10),
+                content: "A",
+                map: map,
+                style: {
+                    color: "#000000",
+                    width: "20px",
+                    height: "20px",
+                    textAlign: "center",
+                    textIndent: "0px"
+                },
+                position: a
+            });
+            var label2 = new qq.maps.Label({
+                offset: new qq.maps.Size(-30, -10),
+                content: "B",
+                map: map,
+                style: {
+                    color: "#000000",
+                    width: "20px",
+                    height: "20px",
+                    textAlign: "center",
+                    textIndent: "0px"
+                },
+                position: b
+            });
+            var label3 = new qq.maps.Label({
+                offset: new qq.maps.Size(-30, -10),
+                content: "C",
+                map: map,
+                style: {
+                    color: "#000000",
+                    width: "20px",
+                    height: "20px",
+                    textAlign: "center",
+                    textIndent: "0px"
+                },
+                position: c
+            });
+            var label4 = new qq.maps.Label({
+                offset: new qq.maps.Size(5, -10),
+                content: "D",
+                map: map,
+                style: {
+                    color: "#000000",
+                    width: "20px",
+                    height: "20px",
+                    textAlign: "center",
+                    textIndent: "0px"
+                },
+                position: d
+            });
+
+
+            //ABCD形成闭合路径
+            var path = [a, b, c, d];
+            //用覆盖物显示闭合路径
+            new qq.maps.Polygon({
+                path: [a, b, c, d],
+                map: map
+            });
+
+            //计算闭合路径的面积
+            document.getElementById("area").innerHTML = "封闭覆盖物的面积是:" + qq.maps.geometry.spherical.computeArea(path) + "平方米";
+
+
+            //把线段CD设置为折线覆盖物
+            var polyline = new qq.maps.Polyline({
+                path: [c, d],
+                strokeColor: '#000000',
+                strokeWeight: 5,
+                editable: false,
+                map: map
+            });
+
+            //计算两点间的距离
+            document.getElementById("res").innerHTML = "CD两点间距离是:" + qq.maps.geometry.spherical.computeDistanceBetween(c, d) + "米";
+
+            //计算航向
+            document.getElementById("course").innerHTML = "C到D的航向是:" + qq.maps.geometry.spherical.computeHeading(c, d) + "度";
+
+            //计算路径长度
+            document.getElementById("length").innerHTML = "BCD路径长度:" + qq.maps.geometry.spherical.computeLength([b, c, d]) + "米";
+
+            //通过起始点坐标、距离以及航向算出终点坐标。
+            e = qq.maps.geometry.spherical.computeOffset(a, 2000, 30);
+            //为终点E设置标志
+            var markerE = new qq.maps.Marker({
+                position: e,
+                map: map
+            });
+            //为终点E设置文字标注
+            var label5 = new qq.maps.Label({
+                offset: new qq.maps.Size(5, -10),
+                content: "E",
+                map: map,
+                style: {
+                    color: "#000000",
+                    width: "20px",
+                    height: "20px",
+                    textAlign: "center",
+                    textIndent: "0px"
+                },
+                position: e
+            });
+
+            document.getElementById("eLatLng").innerHTML = "E是距离A点2000米航向30度的点,E的坐标是:" + e;
+
+            //通过终点坐标、距离以及航向算出起始点坐标。
+            document.getElementById("aLatLng").innerHTML = "给出E点坐标,E是距离A点2000米航向30度的点,算出A点坐标:" + qq.maps.geometry.spherical.computeOffsetOrigin(e, 2000, 30);
+
+            //返回闭合路径的有向面积。有向面积可以用于检测路径的方向。返回的有向面积单位为平方米。
+            document.getElementById("dba").innerHTML = "由D,B,A组成闭合路径的有向面积:" + qq.maps.geometry.spherical.computeSignedArea([d, b, a]) + "平方米";
+
+            //返回在起终点连线上位于给定比例的点坐标。比例值fraction范围为0~1。
+            f = qq.maps.geometry.spherical.interpolate(c, d, 0.4);
+
+console.log(qq.maps.geometry.spherical.computeHeading(a, e));
+console.log(qq.maps.geometry.spherical.computeHeading(e, a));
+
+            //为F点设置标志
+            var markerF = new qq.maps.Marker({
+                position: f,
+                map: map
+            });
+            //为F点设置文字标注
+            var label6 = new qq.maps.Label({
+                offset: new qq.maps.Size(-10, 8),
+                content: "F",
+                map: map,
+                style: {
+                    color: "#000000",
+                    width: "20px",
+                    height: "20px",
+                    textAlign: "center",
+                    textIndent: "0px"
+                },
+                position: f
+            });
+            document.getElementById("fLatLng").innerHTML = "F点在CD上,比例为0.4,F点坐标为:" + f;
+
+        }
+    </script>
+</body>
+
+</html>

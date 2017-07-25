@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+</head>
+
+<body>
+    <button class="regist">regist</button>
+    <button class="login">login</button>
+    <button class="myTeam">myTeam</button>
+	<button class="getBag">getBag</button>
+
+
+<!-- id: 8
+img: "http://static-img.lomocoin.com/static/head/user/002.jpg"
+rtoken: "cSI+JYJiAu4oaT0sjM4zCUmqF96sDXdQIxk10q7cVqlQChVslNHizBYknyxc41stThxJukxJB44JmXaQseANPA=="
+token: "56a9b083a20b660e068b4567"
+uname: "o6_bmjrPTlm7_2skVt7hMZOPf92M"
+
+rtoken: "LnazPFgae/ku+Y9kuix4BjNkotLdrR5os4rIu3A3h1nc9yNVHmHkzuGFyHfHsCY2MVctoLFfUoFGQp7DSO/mGg=="
+token: "56c5cbcda20b66246c8b456e"
+uname: "o6_bmjrPTlm7_2s0Vt7hMZOPf92M"
+unick: "匿名用户"
+utype: 1 
+
+weixin: o6_bmjrPTlm7_2skVt7hMZOPf92M
+lomo-token "56b367b9a20b66d5618b4568"
+rtoken: "cSI+JYJiAu4oaT0sjM4zCUmqF96sDXdQIxk10q7cVqlQChVslNHizBYknyxc41stThxJukxJB44JmXaQseANPA=="
+token: "56c04dfca20b66ff1e8b4567"
+uname: "o6_bmjrPTlm7_2skVt7hMZOPf92M"
+
+
+rtoken: "cSI+JYJiAu4oaT0sjM4zCUmqF96sDXdQIxk10q7cVqlQChVslNHizBYknyxc41stThxJukxJB44JmXaQseANPA=="
+token: "56c04dfca20b66ff1e8b4567"
+uname: "o6_bmjrPTlm7_2skVt7hMZOPf92M"
+
+
+rtoken: "C/BmKw7Fak1QvQUk2nvsvQif4Jx8hhewjtYGZlVQxh5/k34I7r/naKObx86C/gfLRTmBCQChvE4xsdJ+fs/1PA=="
+token: "56c04f3fa20b66df208b4567"
+uname: "o6_bmjrPTlm7_2skVt7hLZOPf92M"
+
+rtoken: "KrYaC4XYu4xhq5/bVmSfbUmqF96sDXdQIxk10q7cVqlQChVslNHizHkhqq07guGPAr3buU9sHvkhPtf0lye/Aw=="
+token: "56c5232aa20b66c94c8b456c"
+uname: "Q6_bmjrPTlm7_2skVt7hLZOPf92M"
+
+teamId:56bc585aa20b66f54d8b4568
+
+
+-->
+</body>
+<script type="text/javascript" src="../lib/jQuery/jquery-2.2.0.min.js"></script>
+<script type="text/javascript">
+	var _base_url = "http://42.96.140.187:7788/";
+
+    $(".regist").click(function(){
+        $.ajax({
+            type: "POST",
+            url: _base_url + "regist",
+            dataType : "jsonp",
+            crossDomain: true,
+            data: {
+                user    : "Q6_bmjrPTlm7_2skVt7hLZOPf92M",
+                pass    : "",
+                type    : "1"
+            }
+        }).success(function(msg) {
+            console.log(msg);
+        }).fail(function(msg) {
+            console.log(msg);
+        });
+    });
+
+	$(".login").click(function(){
+        $.ajax({
+            type: "POST",
+            url: _base_url + "login",
+            dataType : "jsonp",
+            crossDomain: true,
+            data: {
+				user    : "o6_bmjrPTlm7_2s0Vt7hMZOPf92M",
+				pass    : "",
+				type    : "1"
+            }
+        }).success(function(msg) {
+            console.log(msg);
+        }).fail(function(msg) {
+            console.log(msg);
+        });
+	});
+
+    $(".myTeam").click(function(){
+        $.ajax({
+            type: "GET",
+            url: _base_url + "group-mine",
+            dataType : "jsonp",
+            crossDomain: true,
+            data: {
+                token: '56c0507aa20b66dd228b4567' // 身份标识符
+            }
+        }).success(function(msg) {
+            console.log(msg);
+            if (msg.ISOK == 1) {
+                var data = msg.DATA;
+/*                if () {
+                }*/
+            }
+        }).fail(function(msg) {
+            console.log(msg);
+        });
+    });
+
+    $(".getBag").click(function(){
+        $.ajax({
+            type: "GET",
+            url: "http://42.96.140.187:7788/bag-find",
+            dataType : "jsonp",
+            crossDomain: true,
+            data: {
+                token: "56c675fea20b66eb718b4567", // 身份标识符
+                id: "56cebf3ba20b66894f8b4567", // 萌袋ID
+                pos: "109.44133826494,24.270833226489"// 当前GPS坐标
+            }
+        }).success(function(msg) {
+            console.log(msg);
+        }).fail(function(msg) {
+            console.log(msg);
+        });
+    });
+
+
+</script>
+</html>

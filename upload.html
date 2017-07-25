@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<meta name="format-detection" content="telephone=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<title>upload</title>
+
+<link type="text/css" rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="lib/font-awesome-4.5.0/css/font-awesome.min.css">
+<link type="text/css" rel="stylesheet" href="lib/framework7/css/framework7.ios.css" />
+<!-- <link type="text/css" rel="stylesheet" href="css/icon.css" /> -->
+<link type="text/css" rel="stylesheet" href="lib/laker-popup/laker-popup.css" />
+<link type="text/css" rel="stylesheet" href="css/style.css" />
+</head>
+
+<body>
+
+<style>
+  .thumb {
+    height: 75px;
+    border: 1px solid #000;
+    margin: 10px 5px 0 0;
+  }
+</style>
+
+<input type="file" id="files" name="files[]" multiple />
+<output id="list"></output>
+<button class="trigger">trigger</button>
+<button class="submit">submit</button>
+<div class="aa"></div>
+
+<script type="text/javascript" src="lib/jQuery/jquery-2.2.0.min.js"></script>
+<script>
+
+$(".trigger").click(function(){
+  $("#files").trigger("click");
+});
+
+
+
+
+var files;
+  function handleFileSelect(evt) {
+     files = evt.target.files; // FileList object
+     console.dir(files);
+	   console.dir(files[0]);
+    // Loop through the FileList and render image files as thumbnails.
+    for (var i = 0, f; f = files[i]; i++) {
+
+      // Only process image files.
+      if (!f.type.match('image.*')) {
+        continue;
+      }
+
+      var reader = new FileReader();
+
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+          // Render thumbnail.
+          var span = document.createElement('span');
+          span.innerHTML = ['<img class="thumb" src="', e.target.result,
+                            '" title="', escape(theFile.name), '"/>'].join('');
+          document.getElementById('list').insertBefore(span, null);
+        };
+      })(f);
+
+      // Read in the image file as a data URL.
+      reader.readAsDataURL(f);
+    }
+  }
+
+  $(".submit").click(function(){
+        var form_data = new FormData();
+        var file_data = $("#files").prop("files")[0];
+        console.log(file_data);
+        form_data.append("token", '56c675fea20b66eb718b4567');
+        form_data.append("id", '56cf0012a20b662e138b4567');
+        form_data.append("img", file_data);
+        console.dir(form_data);
+       $.ajax({
+            type: "POST",
+            url: 'http://42.96.140.187:7788/bag-img',
+            dataType : "jsonp",
+            crossDomain: true,
+            data: form_data,
+           processData: false,  // tell jQuery not to process the data
+           contentType: false,  // tell jQuery not to set contentType
+        }).success(function(msg) {
+            console.log(msg);
+        }).fail(function(msg) {
+            console.log(msg);
+        });
+ /*    console.dir(files[0]);
+    var data = new FormData();
+    data.append( 'file', files[0] );
+    console.dir(data);*/
+  });
+
+  document.getElementById('files').addEventListener('change', handleFileSelect, false);
+</script>
+
+
+</body>
+<!-- <script type="text/javascript" src="lib/zepto/zepto.min.js"></script> -->
+<script type="text/javascript" src="lib/url/url.js"></script>
+<!-- <script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp&key=YRBBZ-6MUK4-U4MUZ-XEGLO-FGSTV-COBDO&libraries=drawing,geometry,convertor"></script> -->
+<!-- <script type="text/javascript" src="lib/coord/coord.js"></script> -->
+<!-- <script type="text/javascript" src="lib/laker-popup/laker-popup.js"></script> -->
+<!-- <script type="text/javascript" src="js/mainjs.js"></script> -->
+<!-- <script type="text/javascript" src="js/editor.js"></script> -->
+
+</html>

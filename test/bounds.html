@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<title>显示边界信息</title>
+<style type="text/css">
+*{
+    margin:0px;
+    padding:0px;
+}
+body, button, input, select, textarea {
+    font: 12px/16px Verdana, Helvetica, Arial, sans-serif;
+}
+#container{
+    min-width:603px;
+    min-height:767px;
+}
+</style>
+<script charset="utf-8" src="http://map.qq.com/api/js?v=2.exp"></script>
+<script>
+var init = function() {
+    var width = document.getElementById("width");
+    var height = document.getElementById("height");
+    var west_north = document.getElementById("west-north");
+    var eash_south = document.getElementById("eash-south");
+    var map = new qq.maps.Map(document.getElementById("container"),{
+        center: new qq.maps.LatLng(39.916527,116.397128),       //设置地图中心点
+        zoom: 13                          //控制缩放级别
+    });
+    function resetBounds() {
+        var bounds = map.getBounds();     //获取函数范围
+        console.log(map.getBounds());
+        console.log(map);
+        if(bounds){                       //如果得到函数范围值
+            west_north.innerHTML =        //西北角的坐标值
+                '[' + bounds.getNorthEast().getLat().toFixed(5) +
+                ', ' + bounds.getNorthEast().getLng().toFixed(5) + ']';
+            eash_south.innerHTML =        //东南角的坐标值
+                '[' + bounds.getSouthWest().getLat().toFixed(5) + 
+                ', ' + bounds.getSouthWest().getLng().toFixed(5) + ']';
+        }
+        
+    }
+    //添加地图监听事件 如果位置改变 则触发函数 resetBounds
+    qq.maps.event.addListener(map, 'bounds_changed', resetBounds);
+}
+</script>
+</head>
+<body onload="init()">
+<div id="container"></div>
+<div id="info">
+    当前地图的经纬度范围(东北点,西南点)为:
+    (<span id="west-north"></span>,<span id="eash-south"></span>)
+</div>
+</body>
+</html>

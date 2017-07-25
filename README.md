@@ -1,28 +1,12 @@
-# Project List
+# Lomo Coin
 
-Checkout the branches to see the projects.
+A LBS game.
 
-# vue-eleme
+## Technic
 
-**Introduction:**  A eleme written by vue.js
+Tencent map, Rongyun chatting IM, Wechat login.
 
-**Branch:** vue-eleme
+## Run
 
-## Vue To-do List
-
-**Introduction:** A To-do List written by Vue.js 2.
-
-**Branch:** vue-todo
-
-## Vue Eleme
-
-**Introduction:** A Eleme-like website written by Vue.js 2.
-
-**Branch:**  vue-eleme
-
-## Angular Ionic App
-
-**Introduction:** Using Angular and Ionic to build Android App.
-
-**Branch:** ng-ionc
+Run it under server environment such as WAMP.
 
