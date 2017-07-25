@@ -27,8 +27,16 @@ Checkout the branches to see the projects.
 **Branch:** ng-ionc
 
 
-# Todolist(Simple version)
+## Todolist(Simple version)
 
 **Introduction:** A simple version of vue todolist.
 
 **Branch:** vue-todo2
+
+
+## Lomo
+
+**Introduction:** A LBS game.
+
+**Branch:** lomo
+
