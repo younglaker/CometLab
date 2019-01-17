@@ -19,6 +19,31 @@ def print_text(font, x, y, text, color=(255, 255, 255)):
     screen.blit(imgText, (x, y))
 
 
+# 炮弹
+class Bullet:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.pic = pygame.image.load("pao.png")
+
+    def draw(self):
+        # 速度为2
+        self.y = self.y - 2
+
+
+# 爱心
+class Heart:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+        self.pic = pygame.image.load("heart.png")
+
+    def draw(self):
+        # 速度为3
+        self.y = self.y + 3
+
+
+
 # 全局变量设置
 pygame.init()
 screen = pygame.display.set_mode((600, 500))
@@ -84,19 +109,9 @@ mine_x = random.randint(0, 500)
 bomb_pic = pygame.image.load("bomb.png")
 
 bullet = False
+heart = Heart(random.randint(0, 500), -150)
 
 start = True
-
-# 炮弹
-class Bullet:
-    def __init__(self, x, y):
-        self.x = x
-        self.y = y
-        self.pic = pygame.image.load("pao.png")
-
-    def draw(self):
-        self.y = self.y - 2
-
 
 
 # 游戏循环
@@ -243,6 +258,27 @@ while True:
                         score += 10
                         bullet.y = -100
                         mine_y= 550
+
+                # heart的位置再游戏区域内进行检测
+                if heart.y < 500:
+                    # 当猫咪的坐标在爱心的坐标上下50px 范围内，且爱心纵坐标大于小猫纵坐标
+                    # 则表示接住爱心，加一个生命值
+                    # 再把爱心位置设置为-150，因为等待下一次更新
+                    if heart.x -50 < pos_x < heart.x+50 and heart.y > pos_y:
+                        # print('jiezhu')
+                        lives += 1
+                        heart.x = random.randint(0, 500)
+                        heart.y = -150
+
+            # 当生命值小于8时，出现爱心补充生命值
+            # 只有生命值小于8的时候，才执行draw()更新
+            if lives < 8 :
+                # 设置1000，让爱心的出现有个时间间隔
+                if heart.y > 1000:
+                    heart.x = random.randint(0, 500)
+                    heart.y = -100
+                heart.draw()
+                screen.blit(heart.pic, (heart.x, heart.y))
 
             # 画鱼
             screen.blit(fish, (bomb_x, int(bomb_y)))
