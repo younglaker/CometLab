@@ -117,6 +117,7 @@ start = True
 # 游戏循环
 while True:
 
+    # 再按 s 键 恢复游戏
     for event in pygame.event.get():
         if event.type == KEYUP:
             if event.key == pygame.K_s:
@@ -129,10 +130,13 @@ while True:
             if event.type == QUIT:
                 sys.exit()
 
+            # 检测鼠标移动事件，更新鼠标变量的数据
             elif event.type == MOUSEMOTION:
                 mouse_x, mouse_y = event.pos
                 move_x, move_y = event.rel
 
+            # 但鼠标 up 的时候，检测是否是游戏结束状态
+            # 如果是游戏结束状态，就重置数据，重新开始游戏
             elif event.type == MOUSEBUTTONUP:
                 if game_over:
                     game_over = False
@@ -143,7 +147,10 @@ while True:
                     mine = 0
                     flag = 0
                     pic = cat
+
+            # 检测键盘事件
             elif event.type == KEYUP:
+                # 按 s 键暂停游戏
                 if event.key == pygame.K_s:
                     start = False
 
