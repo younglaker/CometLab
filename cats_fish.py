@@ -78,10 +78,16 @@ fish2 = pygame.image.load("fish_green.png")
 width, height = fish2.get_size()
 fish2 = pygame.transform.smoothscale(fish2, (width // 3, height // 3))
 
+# 界面
 init = pygame.image.load("init.png")
+win = pygame.image.load("win.png")
+lose = pygame.image.load("lose.png")
+
+
 lives = 10
 score = 0
 clock_start = 0
+# game_over: 1-显示开始页，2-显示通关页，3-显示失败页
 game_over = 1
 mouse_x = mouse_y = 0
 Round = 1
@@ -135,12 +141,12 @@ while True:
                 mouse_x, mouse_y = event.pos
                 move_x, move_y = event.rel
 
-            # 但鼠标 up 的时候，检测是否是游戏结束状态
+            # 当鼠标 up 的时候，检测是否是游戏结束状态
             # 如果是游戏结束状态，就重置数据，重新开始游戏
             elif event.type == MOUSEBUTTONUP:
                 if game_over:
                     game_over = False
-                    lives = 10
+                    lives = 8
                     score = 0
                     Round = 1
                     vel_y = 3
@@ -168,10 +174,13 @@ while True:
         screen.fill( black)
 
         # 游戏结束，显示主页
-        if game_over:
+        if game_over ==  1:
             screen.blit(init, (30, 60))
             # print_text(font3, 200, 400, "点击开始")
             # print_text(font2, 90, 480, "小组成员：李宵汉、黄绮、邹晓旭、刘严璟、徐佩文")
+        elif game_over == 3:
+            print_text(font1, 250, 60, "分数为" + str(score))
+            screen.blit(lose, (100, 100))
         # 开始游戏
         else:
             # 开始
@@ -213,7 +222,7 @@ while True:
                 bomb_y = -50
                 lives -= 1
                 if lives == 0:
-                    game_over = True
+                    game_over = 3
             # 检查玩家是否接到了红鱼
             # 碰撞检测函数，查看是否接住鱼
             elif bomb_y > pos_y:
@@ -231,7 +240,7 @@ while True:
                 bomb_y2 = -230
                 lives -= 1
                 if lives == 0:
-                    game_over = True
+                    game_over = 3
             # 检查玩家是否接到了绿鱼
             elif bomb_y2 > pos_y:
                 # 接到鱼
@@ -255,7 +264,7 @@ while True:
                         lives -= 1
                         pic = cat2
                         if lives == 0:
-                            game_over = True
+                            game_over = 3
 
                 if bullet:
                     # 打中驴，把驴和子弹清空（移到屏幕外）
