@@ -2,11 +2,6 @@
 # 从天上会随机的掉下鱼，你需要使用鼠标操纵猫去接住鱼，丢失一条鱼损失一条命，一共有10条命，同时还要避免接到炸弹。接住鱼会有积分。
 
 
-# todolist
-#  修改测试的等级1分数范围
-# 减少鱼和驴的速度
-# 增加爱心
-
 
 import sys, random, time, pygame
 from pygame.locals import *
@@ -144,9 +139,9 @@ while True:
             # 当鼠标 up 的时候，检测是否是游戏结束状态
             # 如果是游戏结束状态，就重置数据，重新开始游戏
             elif event.type == MOUSEBUTTONUP:
-                if game_over:
-                    game_over = False
-                    lives = 8
+                if game_over == 1:
+                    game_over = 0
+                    lives = 10
                     score = 0
                     Round = 1
                     vel_y = 3
@@ -178,6 +173,9 @@ while True:
             screen.blit(init, (30, 60))
             # print_text(font3, 200, 400, "点击开始")
             # print_text(font2, 90, 480, "小组成员：李宵汉、黄绮、邹晓旭、刘严璟、徐佩文")
+        elif game_over == 2:
+            print_text(font1, 250, 60, "分数为" + str(score))
+            screen.blit(win, (100, 100))
         elif game_over == 3:
             print_text(font1, 250, 60, "分数为" + str(score))
             screen.blit(lose, (100, 100))
@@ -193,7 +191,8 @@ while True:
             elif score > 120 and score < 150:
                 Round = 5
             elif score >= 150:
-                Round = 6
+                # Round = 6
+                game_over = 2
             # 显示难度值
             print_text(font1, 280, 0, "难度: " + str(Round))
             # 设置速度
