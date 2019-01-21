@@ -2,6 +2,16 @@
 
 Checkout the branches to see the projects.
 
+
+## Python Game: Cats and Fish
+
+**Introduction:** A python game, writen by python 3.7 and pygame.
+
+**Date: ** 2019.1
+
+**Branch:** cats-game
+
+
 ## Vue To-do List
 
 **Introduction:** A To-do List written by Vue.js 2.
