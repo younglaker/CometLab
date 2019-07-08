@@ -26,10 +26,9 @@
       </div>
     </div> -->
     <div>
-      Add:
       <!-- 获取input的值用v-model='modelName'，可以直接{{name}}来打印，要在 data里return modelName，才能在js里调用 this.modelName -->
-      <input type="" name="newNewsTitle"  v-model="newNewsTitle">
-      <input type="" name=""  v-model="newNewsCont">
+      Title: <input type="" name="newNewsTitle"  v-model="newNewsTitle">
+      Content: <input type="" name=""  v-model="newNewsCont">
       <button v-on:click="addNews">Add</button>
     </div>
 
@@ -37,12 +36,14 @@
       <div class="table_title">
         <div class="title title1">ID</div>
         <div class="title title2">Title</div>
-        <div class="title title3">Operation</div>
+        <div class="title title3">Content</div>
+        <div class="title title4">Operation</div>
       </div>
       <div class="table_content" v-for="item in news" :key="item.id">
         <div class="content content1"> {{item.id}} </div>
         <div class="content content2"> {{item.title}} </div>
-        <div class="content content3">
+        <div class="content content3"> {{item.content}} </div>
+        <div class="content content4">
           <button >Edit</button>
           <button >Delete</button>
         </div>
@@ -105,6 +106,7 @@ export default {
     addNews(event) {
       console.log('message')
 
+      // 获取input内容
       const vtitle = this.newNewsTitle
       const vcontent = this.newNewsCont
 
@@ -113,7 +115,24 @@ export default {
         variables: {
           title: vtitle,
           content: vcontent,
+        },
+        update: (cache, {data: {insert_news}}) => {
+          try {
+            const data = cache.readQuery({
+              query: GET_NEWS
+            })
+            const insrtedNews = insert_news.returning;
+            data.news.splice(-1, 0, insrtedNews[0]);
+            cache.writeQuery({
+              query: GET_NEWS,
+              data
+            })
+          }
+          catch (error) {
+            console.log(error)
+          }
         }
+
       })
 
     }
@@ -139,10 +158,13 @@ export default {
   width: 100px;
 }
 .table_title .title2, .table_content .content2 {
-  width: 400px;
+  width: 300px;
 }
 .table_title .title3, .table_content .content3 {
-  width: 500px;
+  width: 400px;
+}
+.table_title .title4, .table_content .content4 {
+  width: 200px;
 }
 
 </style>
