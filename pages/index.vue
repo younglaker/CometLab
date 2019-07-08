@@ -25,9 +25,13 @@
         </a>
       </div>
     </div> -->
-    <form @submit.prevent="addNews">
-      Add: <input type="" name=""  >
-    </form>
+    <div>
+      Add:
+      <!-- 获取input的值用v-model='modelName'，可以直接{{name}}来打印，要在 data里return modelName，才能在js里调用 this.modelName -->
+      <input type="" name="newNewsTitle"  v-model="newNewsTitle">
+      <input type="" name=""  v-model="newNewsCont">
+      <button v-on:click="addNews">Add</button>
+    </div>
 
     <div class="table_block">
       <div class="table_title">
@@ -65,6 +69,20 @@ const GET_NEWS = gql`
   }
 `;
 
+const ADD_NEWS = gql`
+  mutation addNews ($title: String!, $content:String!) {
+    insert_news(objects: {title: $title, content: $content, active: 1}) {
+      affected_rows
+      returning {
+        id
+        title
+        content
+        active
+      }
+    }
+  }
+`;
+
 export default {
   components: {
     // Logo
@@ -78,12 +96,26 @@ export default {
   },
   data() {
     return {
-      news: []
+      news: [],
+      newNewsTitle: '',
+      newNewsCont: ''
     };
   },
   methods: {
     addNews(event) {
       console.log('message')
+
+      const vtitle = this.newNewsTitle
+      const vcontent = this.newNewsCont
+
+      this.$apollo.mutate({
+        mutation: ADD_NEWS,
+        variables: {
+          title: vtitle,
+          content: vcontent,
+        }
+      })
+
     }
   }
 };
