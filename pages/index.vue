@@ -166,8 +166,6 @@ export default {
   methods: {
     // 新增 news
     addNews(event) {
-      // console.log('message')
-
       // 获取input内容
       const vtitle = this.newNewsTitle
       const vcontent = this.newNewsCont
@@ -203,13 +201,16 @@ export default {
         }
 
       })
-
+      .then(res => {
+        this.$data.newNewsTitle = ''
+        this.$data.newNewsCont = ''
+      })
     },
     // 把该内容插入到input里
     insertEditNews (event) {
       let element = event.currentTarget
       let itemid = element.getAttribute('itemid');
-      // console.log(itemid)
+
       this.$apollo.query({
         query: QUE_ID_NEWS,
         variables: {
@@ -217,13 +218,9 @@ export default {
         }
       })
       .then(res => {
-        // console.log(res.data.news[0])
-        // this.$data.idNews = res.data.news[0]
         this.$data.editNewsTitle = res.data.news[0].title
         this.$data.editNewsCont = res.data.news[0].content
         this.$data.editNewsId = res.data.news[0].id
-        // console.log(this.$data.idNews)
-        // console.log(this.$data.editNewsTitle)
       })
     },
     // 提交更改的内容
@@ -244,8 +241,6 @@ export default {
         }
       })
       .then(res => {
-          // console.log(res.data.news[0])
-          // this.$data.idNews = res.data.news[0]
           this.$data.editNewsTitle = ''
           this.$data.editNewsCont = ''
           this.$data.editNewsId = ''

@@ -1,10 +1,16 @@
 <template>
 	<div>
+		<nuxt-link to="/">Back</nuxt-link>
 		<h3>Search results:</h3>
 		<!-- <div>Id: {{$route.params.id}}</div> -->
-		<div>Id: {{id}} </div>
-		<div>Title: {{title}} </div>
-		<div>Content: {{content}} </div>
+		<div v-if="showFlag">
+			<div>Id: {{id}} </div>
+			<div>Title: {{title}} </div>
+			<div>Content: {{content}} </div>
+		</div>
+		<div v-else>
+			<p>Not found</p>
+		</div>
 	</div>
 </template>
 
@@ -25,9 +31,10 @@ query getIdNews ($id: Int!) {
 export default {
 	data() {
     return {
-    	id: this.$route.params.id,
+    	id: parseInt(this.$route.params.id), // id要从 string 转 int
     	title: '',
-    	content: ''
+    	content: '',
+    	showFlag: 0
     };
   },
   // 加载组件后立即执行
@@ -44,8 +51,12 @@ export default {
 	      }
 	    })
 	    .then(res => {
-	      this.$data.title = res.data.news[0].title
-	      this.$data.content = res.data.news[0].content
+	    	if (res.data.news.length > 0) {
+	    		// $data可以省略
+	    		this.showFlag = 1
+		      this.$data.title = res.data.news[0].title
+		      this.$data.content = res.data.news[0].content
+	    	}
 	    })
   	}
   }
