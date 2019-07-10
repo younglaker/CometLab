@@ -26,10 +26,19 @@
       </div>
     </div> -->
     <div>
+      <!-- {{news}} -->
+      <h3>Add news</h3>
       <!-- 获取input的值用v-model='modelName'，可以直接{{name}}来打印，要在 data里return modelName，才能在js里调用 this.modelName -->
       Title: <input type="" name="newNewsTitle"  v-model="newNewsTitle">
       Content: <input type="" name=""  v-model="newNewsCont">
       <button v-on:click="addNews">Add</button>
+    </div>
+    <div>
+      <h3>Edit news</h3>
+      <!-- 获取input的值用v-model='modelName'，可以直接{{name}}来打印，要在 data里return modelName，才能在js里调用 this.modelName -->
+      Title: <input type="" name="newNewsTitle"  v-model="editNewsTitle">
+      Content: <input type="" name=""  v-model="editNewsCont">
+      <button v-on:click="editNews">Edit</button>
     </div>
 
     <div class="table_block">
@@ -44,7 +53,7 @@
         <div class="content content2"> {{item.title}} </div>
         <div class="content content3"> {{item.content}} </div>
         <div class="content content4">
-          <button >Edit</button>
+          <button  :itemid="`${item.id}`" @click="insertEditNews" >Edit</button>
           <button :itemid="`${item.id}`" @click="delNews" >Delete</button>
         </div>
       </div>
@@ -60,39 +69,50 @@
 import gql from "graphql-tag";
 
 const GET_NEWS = gql`
-  query getMovies {
-    news {
+query getNews {
+  news {
+    id
+    title
+    content
+    active
+  }
+}
+`;
+
+const ADD_NEWS = gql`
+mutation addNews ($title: String!, $content:String!) {
+  insert_news(objects: {title: $title, content: $content, active: 1}) {
+    affected_rows
+    returning {
       id
       title
       content
       active
     }
   }
-`;
-
-const ADD_NEWS = gql`
-  mutation addNews ($title: String!, $content:String!) {
-    insert_news(objects: {title: $title, content: $content, active: 1}) {
-      affected_rows
-      returning {
-        id
-        title
-        content
-        active
-      }
-    }
-  }
+}
 `;
 
 const DEL_NEWS = gql`
-  mutation delteNews($id: Int!) {
-    delete_news(where: {id: {_eq: $id}}) {
-      affected_rows
-      returning {
-        id
-      }
+mutation delteNews($id: Int!) {
+  delete_news(where: {id: {_eq: $id}}) {
+    affected_rows
+    returning {
+      id
     }
   }
+}
+`;
+
+const QUE_ID_NEWS = gql`
+query getIdNews ($id: Int!) {
+  news(where: {id: {_eq: $id}}) {
+    id
+    content
+    active
+    title
+  }
+}
 `;
 
 export default {
@@ -101,21 +121,24 @@ export default {
   },
 
   apollo: {
+    // 直接获取news，这里news是数据库返回的数据的名称，很表名一样
     news: {
       prefetch: true,
       query: GET_NEWS
-    }
+    },
   },
   data() {
     return {
-      news: [],
-      newNewsTitle: '',
-      newNewsCont: ''
+      news: [], // apollo的 news 同名
+      newNewsTitle: '', //input 的 model
+      newNewsCont: '',
+      editNewsTitle: '',
+      editNewsCont: ''
     };
   },
   methods: {
     addNews(event) {
-      console.log('message')
+      // console.log('message')
 
       // 获取input内容
       const vtitle = this.newNewsTitle
@@ -154,6 +177,22 @@ export default {
       })
 
     },
+    insertEditNews (event) {
+      let element = event.currentTarget
+      let itemid = element.getAttribute('itemid');
+      console.log(itemid)
+      this.$apollo.query({
+              query: QUE_ID_NEWS,
+              variables: {
+                id: itemid
+              }
+            })
+            .then(res => {
+              // this.Parse(res.data.erSeasons)
+              console.log(res)
+            })
+    },
+    editNews () {},
     delNews (event) {
       let element = event.currentTarget
       let itemid = element.getAttribute('itemid');
@@ -164,25 +203,28 @@ export default {
         variables: {
           id: itemid
         },
+        // 更新缓存
         update: (store, { data: { delete_news } }) => {
           try {
            if (delete_news.affected_rows) {
-               const data = store.readQuery({
-                 query: GET_NEWS
-               });
-               console.log(data.news)
+             const data = store.readQuery({
+               query: GET_NEWS
+             });
+             // console.log(data.news)
+               // 过滤掉删除的item
                data.news = data.news.filter(t => {
-                // 如果不用parseInt，就用!=
-                 return parseInt(t.id) !== parseInt(itemid);
-               });
-               console.log(data.news)
+                // 如果不用parseInt，就用 !=
+                // 返回除了 itemid 的 item
+                return parseInt(t.id) !== parseInt(itemid);
+              });
+               // console.log(data.news)
                store.writeQuery({
                  query: GET_NEWS,
                  data
                });
+             }
            }
-          }
-          catch (error) {
+           catch (error) {
             console.log(error)
           }
         }
@@ -192,23 +234,15 @@ export default {
            const data = cache.readQuery({
              query: GET_NEWS,
            });
-           data.news = data.news.filter((item) => item.id !== itemid);
+           data.news = data.news.filter((item) => parseInt(item.id) !== parseInt(itemid) );
            cache.writeQuery({
              query: GET_NEWS,
              data
            });
          }
-        }*/
+       }*/
 
-/*      update: (store, { data: { delete_news } }) => {
-        // Read the data from our cache for this query.
-        const data = store.readQuery({ query: GET_NEWS });
-        // Add our comment from the mutation to the end.
-        data.news.push(delete_news);
-        // Write our data back to the cache.
-        store.writeQuery({ query: GET_NEWS, data });
-      },*/
-      })
+     })
 
     }
   }
