@@ -45,7 +45,7 @@
         <div class="content content3"> {{item.content}} </div>
         <div class="content content4">
           <button >Edit</button>
-          <button >Delete</button>
+          <button :itemid="`${item.id}`" @click="delNews" >Delete</button>
         </div>
       </div>
     </div>
@@ -80,6 +80,14 @@ const ADD_NEWS = gql`
         content
         active
       }
+    }
+  }
+`;
+
+const DEL_NEWS = gql`
+  mutation delteNews($id: Int!) {
+    delete_news(where: {id: {_eq: $id}}) {
+      affected_rows
     }
   }
 `;
@@ -122,7 +130,10 @@ export default {
               query: GET_NEWS
             })
             const insrtedNews = insert_news.returning;
-            data.news.splice(-1, 0, insrtedNews[0]);
+            // 添加到最后一个
+            data.news.splice(data.news.length, 0, insrtedNews[0]);
+            // 添加到第一个
+            // data.news.splice(0, 0, insrtedNews[0])
             cache.writeQuery({
               query: GET_NEWS,
               data
@@ -131,6 +142,34 @@ export default {
           catch (error) {
             console.log(error)
           }
+        }
+
+      })
+
+    },
+    delNews (event) {
+      let element = event.currentTarget
+      let itemid = element.getAttribute('itemid');
+      console.log(itemid)
+
+      this.$apollo.mutate({
+        mutation: DEL_NEWS,
+        variables: {
+          id: itemid
+        },
+        update: (store, { data: { delete_news } }) => {
+         if (delete_news.affected_rows) {
+             const data = store.readQuery({
+               query: GET_NEWS
+             });
+             data.news = data.news.filter(t => {
+               return t.id !== news.id;
+             });
+             store.writeQuery({
+               query: GET_NEWS,
+               data
+             });
+         }
         }
 
       })
