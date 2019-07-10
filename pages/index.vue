@@ -29,16 +29,22 @@
       <!-- {{news}} -->
       <h3>Add news</h3>
       <!-- 获取input的值用v-model='modelName'，可以直接{{name}}来打印，要在 data里return modelName，才能在js里调用 this.modelName -->
-      Title: <input type="" name="newNewsTitle"  v-model="newNewsTitle">
+      Title: <input type="" name=""  v-model="newNewsTitle">
       Content: <input type="" name=""  v-model="newNewsCont">
       <button v-on:click="addNews">Add</button>
     </div>
     <div>
       <h3>Edit news</h3>
       <!-- 获取input的值用v-model='modelName'，可以直接{{name}}来打印，要在 data里return modelName，才能在js里调用 this.modelName -->
-      Title: <input type="" name="newNewsTitle"  v-model="editNewsTitle">
+      Title: <input type="" name=""  v-model="editNewsTitle">
       Content: <input type="" name=""  v-model="editNewsCont">
       <button v-on:click="editNews" :itemid="`${editNewsId}`">Edit</button>
+    </div>
+    <div>
+      <h3>Search news</h3>
+      <!-- 获取input的值用v-model='modelName'，可以直接{{name}}来打印，要在 data里return modelName，才能在js里调用 this.modelName -->
+      Id: <input type="" name=""  v-model="searchId">
+      <button v-on:click="searchNews">Search</button>
     </div>
 
     <div class="table_block">
@@ -56,6 +62,12 @@
           <button  :itemid="`${item.id}`" @click="insertEditNews" >Edit</button>
           <button :itemid="`${item.id}`" @click="delNews" >Delete</button>
         </div>
+<!--         <List
+          :id = "item.id"
+          :title = "item.title"
+          :content = "item.content"
+        /> -->
+
       </div>
     </div>
 
@@ -64,7 +76,7 @@
 </template>
 
 <script>
-// import Logo from '~/components/Logo.vue'
+// import List from '~/components/List.vue'
 
 import gql from "graphql-tag";
 
@@ -129,7 +141,7 @@ mutation editNews($id: Int!, $title: String!, $content: String!) {
 
 export default {
   components: {
-    // Logo
+    // List
   },
 
   apollo: {
@@ -147,10 +159,12 @@ export default {
       editNewsTitle: '',
       editNewsCont: '',
       editNewsId: -1,
+      searchId: ''
       // idNews: []
     };
   },
   methods: {
+    // 新增 news
     addNews(event) {
       // console.log('message')
 
@@ -191,6 +205,7 @@ export default {
       })
 
     },
+    // 把该内容插入到input里
     insertEditNews (event) {
       let element = event.currentTarget
       let itemid = element.getAttribute('itemid');
@@ -211,6 +226,7 @@ export default {
         // console.log(this.$data.editNewsTitle)
       })
     },
+    // 提交更改的内容
     editNews () {
       let element = event.currentTarget
       let itemid = element.getAttribute('itemid');
@@ -235,6 +251,7 @@ export default {
           this.$data.editNewsId = ''
         })
     },
+    // 根据id删除news
     delNews (event) {
       let element = event.currentTarget
       let itemid = element.getAttribute('itemid');
@@ -285,6 +302,14 @@ export default {
        }*/
 
      })
+
+    },
+    // 根据id搜索news
+    searchNews () {
+      // 这里是单引号，$router，不是route
+      // this.$router.push('results');
+      // 这里是`号
+      this.$router.push(`results/${this.searchId}`);
 
     }
   }
