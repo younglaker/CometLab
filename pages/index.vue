@@ -88,6 +88,9 @@ const DEL_NEWS = gql`
   mutation delteNews($id: Int!) {
     delete_news(where: {id: {_eq: $id}}) {
       affected_rows
+      returning {
+        id
+      }
     }
   }
 `;
@@ -130,6 +133,10 @@ export default {
               query: GET_NEWS
             })
             const insrtedNews = insert_news.returning;
+            // splice -----splice(index, num(0), item)
+            // index------要插入的索引位置
+            // num-------为0,如果不是0会替换当前索引处的值
+            // item-------要插入的元素
             // 添加到最后一个
             data.news.splice(data.news.length, 0, insrtedNews[0]);
             // 添加到第一个
@@ -158,20 +165,49 @@ export default {
           id: itemid
         },
         update: (store, { data: { delete_news } }) => {
-         if (delete_news.affected_rows) {
-             const data = store.readQuery({
-               query: GET_NEWS
-             });
-             data.news = data.news.filter(t => {
-               return t.id !== news.id;
-             });
-             store.writeQuery({
-               query: GET_NEWS,
-               data
-             });
-         }
+          try {
+           if (delete_news.affected_rows) {
+               const data = store.readQuery({
+                 query: GET_NEWS
+               });
+               console.log(data.news)
+               data.news = data.news.filter(t => {
+                // 如果不用parseInt，就用!=
+                 return parseInt(t.id) !== parseInt(itemid);
+               });
+               console.log(data.news)
+               store.writeQuery({
+                 query: GET_NEWS,
+                 data
+               });
+           }
+          }
+          catch (error) {
+            console.log(error)
+          }
         }
 
+/*       update: (cache, { data: { delete_news } }) => {
+         if (delete_news.affected_rows) {
+           const data = cache.readQuery({
+             query: GET_NEWS,
+           });
+           data.news = data.news.filter((item) => item.id !== itemid);
+           cache.writeQuery({
+             query: GET_NEWS,
+             data
+           });
+         }
+        }*/
+
+/*      update: (store, { data: { delete_news } }) => {
+        // Read the data from our cache for this query.
+        const data = store.readQuery({ query: GET_NEWS });
+        // Add our comment from the mutation to the end.
+        data.news.push(delete_news);
+        // Write our data back to the cache.
+        store.writeQuery({ query: GET_NEWS, data });
+      },*/
       })
 
     }
