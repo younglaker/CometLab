@@ -38,7 +38,7 @@
       <!-- 获取input的值用v-model='modelName'，可以直接{{name}}来打印，要在 data里return modelName，才能在js里调用 this.modelName -->
       Title: <input type="" name="newNewsTitle"  v-model="editNewsTitle">
       Content: <input type="" name=""  v-model="editNewsCont">
-      <button v-on:click="editNews">Edit</button>
+      <button v-on:click="editNews" :itemid="`${editNewsId}`">Edit</button>
     </div>
 
     <div class="table_block">
@@ -70,7 +70,7 @@ import gql from "graphql-tag";
 
 const GET_NEWS = gql`
 query getNews {
-  news {
+  news (order_by: {id: asc}) {
     id
     title
     content
@@ -114,6 +114,18 @@ query getIdNews ($id: Int!) {
   }
 }
 `;
+const EDIT_NEWS = gql`
+mutation editNews($id: Int!, $title: String!, $content: String!) {
+  update_news(where: {id: {_eq: $id}}, _set: {title: $title, content: $content}) {
+    returning {
+      id
+      title
+      content
+      active
+    }
+  }
+}
+`;
 
 export default {
   components: {
@@ -135,7 +147,7 @@ export default {
       editNewsTitle: '',
       editNewsCont: '',
       editNewsId: -1,
-      idNews: []
+      // idNews: []
     };
   },
   methods: {
@@ -184,26 +196,49 @@ export default {
       let itemid = element.getAttribute('itemid');
       // console.log(itemid)
       this.$apollo.query({
-              query: QUE_ID_NEWS,
-              variables: {
-                id: itemid
-              }
-            })
-            .then(res => {
-              // console.log(res.data.news[0])
-              this.$data.idNews = res.data.news[0]
-              this.$data.editNewsTitle = res.data.news[0].title
-              this.$data.editNewsCont = res.data.news[0].content
-              this.$data.editNewsId = res.data.news[0].id
-              console.log(this.$data.idNews)
-              console.log(this.$data.editNewsTitle)
-            })
+        query: QUE_ID_NEWS,
+        variables: {
+          id: itemid
+        }
+      })
+      .then(res => {
+        // console.log(res.data.news[0])
+        // this.$data.idNews = res.data.news[0]
+        this.$data.editNewsTitle = res.data.news[0].title
+        this.$data.editNewsCont = res.data.news[0].content
+        this.$data.editNewsId = res.data.news[0].id
+        // console.log(this.$data.idNews)
+        // console.log(this.$data.editNewsTitle)
+      })
     },
-    editNews () {},
+    editNews () {
+      let element = event.currentTarget
+      let itemid = element.getAttribute('itemid');
+
+      // 获取input内容
+      const vtitle = this.editNewsTitle
+      const vcontent = this.editNewsCont
+
+      this.$apollo.mutate({
+        mutation: EDIT_NEWS,
+        variables: {
+          id: itemid,
+          title: vtitle,
+          content: vcontent
+        }
+      })
+      .then(res => {
+          // console.log(res.data.news[0])
+          // this.$data.idNews = res.data.news[0]
+          this.$data.editNewsTitle = ''
+          this.$data.editNewsCont = ''
+          this.$data.editNewsId = ''
+        })
+    },
     delNews (event) {
       let element = event.currentTarget
       let itemid = element.getAttribute('itemid');
-      console.log(itemid)
+      // console.log(itemid)
 
       this.$apollo.mutate({
         mutation: DEL_NEWS,
