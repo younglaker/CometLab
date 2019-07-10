@@ -133,7 +133,9 @@ export default {
       newNewsTitle: '', //input 的 model
       newNewsCont: '',
       editNewsTitle: '',
-      editNewsCont: ''
+      editNewsCont: '',
+      editNewsId: -1,
+      idNews: []
     };
   },
   methods: {
@@ -180,7 +182,7 @@ export default {
     insertEditNews (event) {
       let element = event.currentTarget
       let itemid = element.getAttribute('itemid');
-      console.log(itemid)
+      // console.log(itemid)
       this.$apollo.query({
               query: QUE_ID_NEWS,
               variables: {
@@ -188,8 +190,13 @@ export default {
               }
             })
             .then(res => {
-              // this.Parse(res.data.erSeasons)
-              console.log(res)
+              // console.log(res.data.news[0])
+              this.$data.idNews = res.data.news[0]
+              this.$data.editNewsTitle = res.data.news[0].title
+              this.$data.editNewsCont = res.data.news[0].content
+              this.$data.editNewsId = res.data.news[0].id
+              console.log(this.$data.idNews)
+              console.log(this.$data.editNewsTitle)
             })
     },
     editNews () {},
