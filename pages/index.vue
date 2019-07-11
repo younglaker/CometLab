@@ -304,7 +304,9 @@ export default {
       // 这里是单引号，$router，不是route
       // this.$router.push('results');
       // 这里是`号
-      this.$router.push(`results/${this.searchId}`);
+      if ( this.searchId.trim() !== '') {
+        this.$router.push(`results/${this.searchId}`);
+      }
 
     }
   }
