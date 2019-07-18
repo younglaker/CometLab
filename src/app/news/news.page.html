@@ -5,15 +5,14 @@
 </ion-header>
 
 <ion-content>
-  <ion-card>
+  <!-- 注意这里有个 '?', 等数据加载完才渲染-->
+  <!-- res来自news.page.ts, 里面包含articles -->
+  <ion-card *ngFor="let article of res?.articles">
     <ion-card-header>
       <ion-card-subtitle>Card Subtitle</ion-card-subtitle>
-      <ion-card-title>Card Title</ion-card-title>
+      <ion-card-title> {{ article.title }} </ion-card-title>
     </ion-card-header>
-
-    <ion-card-content>
-      Keep close to Nature's heart... and break clear away, once in awhile, and
-      climb a mountain or spend a week in the woods. Wash your spirit clean.
-    </ion-card-content>
+    <ion-img [src]="article.urlToImage"></ion-img>
+    <ion-card-content>{{ article.description }} </ion-card-content>
   </ion-card>
 </ion-content>

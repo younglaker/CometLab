@@ -6,6 +6,9 @@ import { NewsService } from '../news.service';
   styleUrls: ['./news.page.scss']
 })
 export class NewsPage implements OnInit {
+  // 变量res用来存放api获取的数据，any表不指定类型
+  res: any;
+
   constructor(private newsService: NewsService) {}
 
   ngOnInit() {
@@ -13,6 +16,7 @@ export class NewsPage implements OnInit {
       .getData('top-headlines?country=us&category=business')
       .subscribe(data => {
         console.log(data);
+        this.res = data;
       });
   }
 }
