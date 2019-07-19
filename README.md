@@ -2,7 +2,11 @@
 
 Checkout the branches to see the projects.
 
+## Ionic news
 
+**Introduction:** Using Ionic 4, Angularjs 8 to write a news reader app. Run`ionic serve` to run the app.
+git add -A
+git commit -m'merge'
 
 ## Nuxtjs CMS
 
@@ -26,7 +30,6 @@ Checkout the branches to see the projects.
 
 **Branch:** cats-game
 
-
 ## Vue To-do List
 
 **Introduction:** A To-do List written by Vue.js 2.
@@ -37,7 +40,7 @@ Checkout the branches to see the projects.
 
 **Introduction:** A Eleme-like website written by Vue.js 2.
 
-**Branch:**  vue-eleme
+**Branch:** vue-eleme
 
 ## Angular Ionic App
 
@@ -45,17 +48,14 @@ Checkout the branches to see the projects.
 
 **Branch:** ng-ionc
 
-
 ## Todolist(Simple version)
 
 **Introduction:** A simple version of vue todolist.
 
 **Branch:** vue-todo2
 
-
 ## Lomo
 
 **Introduction:** A LBS game.
 
 **Branch:** lomo
-
